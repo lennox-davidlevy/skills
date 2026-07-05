@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Take a monolithic file — the 1400-line file with 20 components in it — and split it into modules a human can read, understand, and change one at a time. This is a **mechanical move, not a rewrite**: code changes address, not behaviour or shape.
 
-Use the `/codebase-design` vocabulary: each new file should be a **module** with a small **interface**, grouped by concept. The failure mode on both sides is shallowness — one giant file is unreadable, but 40 one-export files are dust: all interface, no depth. Aim for files a human can read in one sitting, each owning one concept.
+Use the `/codebase-design` vocabulary: each new file should be a **module** with a small **interface**, grouped by concept. The failure mode on both sides: one giant file is unreadable, but 40 one-export files are dust — shallow modules. Aim for files a human can read in one sitting, each owning one concept.
 
 ## Process
 
@@ -36,7 +36,7 @@ One module at a time:
 2. Keep the original file re-exporting moved names if external callers import from it — killing those re-exports is a follow-up, not part of this job.
 3. Run typecheck (and tests, if present) after **each** move — stay green between moves, so any breakage points at exactly one move.
 
-Move, don't improve. If you spot code begging to be simplified or redesigned, note it for the report — changing it mid-move hides which change broke what. That's `/simplify`'s job, after.
+Move, don't improve. If you spot code begging to be simplified or redesigned, note it for the report and suggest the user run `/simplify` after — changing it mid-move hides which change broke what.
 
 ### 4. Finish
 

@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Simplify
 
-Generated code is reliably overbuilt: speculative abstraction, defensive branches for impossible states, indirection with one caller. The job here is to **grind** it — repeated shrinking passes that preserve behaviour while the code gets smaller — until a pass produces nothing. The result should do the same thing in roughly half the code.
+Generated code is reliably overbuilt: speculative abstraction, defensive branches for impossible states, indirection with one caller. The job here is to **grind** it — repeated shrinking passes that preserve behaviour while the code gets smaller.
 
 This is expensive attention. It's only worth spending in **critical areas** — hot paths, public interfaces, code humans will re-read for years. If the user points you at something peripheral, say so before starting.
 
@@ -30,7 +30,7 @@ The harness must be green before the first pass. Record the exact commands.
 
 ### 3. Grind
 
-Run passes. Each pass: hunt one round of targets, apply the cuts, run the harness, stay green. Hunt for:
+Run passes. Each pass: hunt one round of targets, apply the cuts, run the harness, stay green. If a cut breaks the harness, revert the cut — don't adjust the tests to fit. Hunt for:
 
 - **Speculative generality** — abstraction, parameters, or hooks serving needs that don't exist. Apply the deletion test; if complexity vanishes rather than reappearing at callers, delete it.
 - **Single-use indirection** — a function, class, or layer with exactly one caller that adds no name worth keeping. Inline it.
@@ -47,7 +47,6 @@ Stop when a full pass yields no cuts — that's the completion criterion, not a 
 
 ## Guardrails
 
-- **Behaviour is sacred.** Every pass ends green. If a cut breaks the harness, revert the cut — don't adjust the tests to fit.
 - **The interface holds** unless the user explicitly approves changing it. Shrinking the implementation is free; shrinking the interface is a design decision.
 - **Not code golf.** Fewer lines is the usual outcome, not the goal. When brevity and readability conflict, readability wins.
 - **No feature loss disguised as simplification.** If a branch looks dead but you can't prove it, ask before cutting.
